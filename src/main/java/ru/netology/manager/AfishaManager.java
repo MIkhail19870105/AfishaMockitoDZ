@@ -34,16 +34,16 @@ public class AfishaManager {
     public Afisha[] getAll() {
         int length = items.length;
 
-        if(customAfishaLength<=0){
-            if(defaultAfishaLength<length){
+        if (customAfishaLength <= 0) {
+            if (defaultAfishaLength < length) {
                 length = defaultAfishaLength;
             }
-        }
-        else {
-            if(defaultAfishaLength<length){
+        } else {
+            if (customAfishaLength < length) {
                 length = customAfishaLength;
             }
         }
+
         Afisha[] result = new Afisha[length];
         // перебираем массив в прямом порядке
         // но кладём в результаты в обратном
