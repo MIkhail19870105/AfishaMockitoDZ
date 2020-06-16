@@ -25,7 +25,7 @@ public class AfishaManager {
     }
 
     public Afisha[] getAll() {
-        Afisha[]items = repository.findAll();
+        Afisha[] items = repository.findAll();
         int length = items.length;
 
         if (customAfishaLength <= 0) {

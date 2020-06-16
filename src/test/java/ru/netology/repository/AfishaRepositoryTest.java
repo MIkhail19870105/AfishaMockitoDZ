@@ -22,7 +22,7 @@ class AfishaRepositoryTest {
     private Afisha eleventh = new Afisha(11, "Interstellar", "fantastic");
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         repository.save(first);
         repository.save(second);
         repository.save(third);
@@ -36,45 +36,59 @@ class AfishaRepositoryTest {
 
 
     @Test
-    void shouldSave(){
-        repository.save(tenth);
-        Afisha[]actual = repository.findAll();
-        Afisha[]expected = new Afisha[]{tenth};
-        assertArrayEquals(expected,actual);
+    void shouldSave() {
+        repository.save(eleventh);
+        Afisha[] actual = repository.findAll();
+        Afisha[] expected = new Afisha[]{
+                new Afisha(1, "Inception", "fantastic"),
+                new Afisha(2, "Titanic", "drama"),
+                new Afisha(3, "Leon", "thriller"),
+                new Afisha(4, "Shindler's List", "biography"),
+                new Afisha(5, "Godfather", "criminal"),
+                new Afisha(6, "Pianist", "war"),
+                new Afisha(7, "Lord of the Rings", "fantasy"),
+                new Afisha(8, "Shutter Island", "detective"),
+                new Afisha(9, "Some Like it Hot", "comedy"),
+                new Afisha(11, "Interstellar", "fantastic")
+        };
+        assertArrayEquals(expected, actual);
     }
 
     @Test
-    void shouldFindByIdInRepo(){
+    void shouldFindByIdInRepo() {
         int idToFind = 6;
         repository.findById(idToFind);
         Afisha[] actual = repository.findAll();
-        Afisha[] expected = new  Afisha[]{seventh};
-        assertArrayEquals(expected,actual);
+        Afisha[] expected = new Afisha[]{new Afisha(6, "Pianist", "war")};
+        assertArrayEquals(expected, actual);
     }
 
     @Test
-    void shouldRemoveByIdIfCorrectId(){
+    void shouldRemoveByIdIfCorrectId() {
         int idToRemove = 2;
         repository.removeById(idToRemove);
         Afisha[] actual = repository.findAll();
-        Afisha[] expected = new  Afisha[]{seventh};
-        assertArrayEquals(expected,actual);
+        Afisha[] expected = new Afisha[]{
+                new Afisha(1, "Inception", "fantastic"),
+
+                new Afisha(3, "Leon", "thriller"),
+                new Afisha(4, "Shindler's List", "biography"),
+                new Afisha(5, "Godfather", "criminal"),
+                new Afisha(6, "Pianist", "war"),
+                new Afisha(7, "Lord of the Rings", "fantasy"),
+                new Afisha(8, "Shutter Island", "detective"),
+                new Afisha(9, "Some Like it Hot", "comedy"),
+
+        };
+        assertArrayEquals(expected, actual);
     }
 
     @Test
-    void shouldNotRemoveIfIncorrectId(){
-        int idToRemove = 25;
-        repository.removeById(idToRemove);
-        Afisha[]actual = repository.findAll();
-        Afisha[]expected = new Afisha[]{first,second,third,fourth,fifth,sixth,seventh,eighth,ninth};
-        assertArrayEquals(expected,actual);
-    }
-
-    @Test
-    void shouldRemoveAllFromRepository(){
-        Afisha[]actual = repository.findAll();
-        Afisha[]expected = new Afisha[]{};
-        assertArrayEquals(expected,actual);
+    void shouldRemoveAllFromRepository() {
+        repository.removeAll();
+        Afisha[] actual = repository.findAll();
+        Afisha[] expected = new Afisha[]{};
+        assertArrayEquals(expected, actual);
     }
 
 }

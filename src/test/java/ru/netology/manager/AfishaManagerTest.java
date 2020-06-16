@@ -2,14 +2,26 @@ package ru.netology.manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.netology.domain.Afisha;
+import ru.netology.repository.AfishaRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class AfishaManagerTest {
-    AfishaManager manager;
-    AfishaManager managerCustom;
+    @Mock
 
+    AfishaRepository repository;
+
+    @InjectMocks
+
+    AfishaManager manager = new AfishaManager(repository);
+    AfishaManager managerCustom = new AfishaManager(repository, 5);
 
     private Afisha first = new Afisha(1, "Inception", "fantastic");
     private Afisha second = new Afisha(2, "Titanic", "drama");
@@ -25,102 +37,120 @@ class AfishaManagerTest {
 
     @BeforeEach
     void setUp() {
-        manager = new AfishaManager();
+
+        manager = new AfishaManager(repository);
+        managerCustom = new AfishaManager(repository, 5);
+
+    }
+
+    @Test
+    void addMovie() {
         manager.addMovie(first);
         manager.addMovie(second);
         manager.addMovie(third);
         manager.addMovie(fourth);
-        manager.addMovie(fifth);
-        manager.addMovie(sixth);
-        manager.addMovie(seventh);
-        manager.addMovie(eighth);
-        manager.addMovie(ninth);
 
-
-        managerCustom = new AfishaManager(5);
-        managerCustom.addMovie(first);
-        managerCustom.addMovie(second);
-        managerCustom.addMovie(third);
-        managerCustom.addMovie(fourth);
-        managerCustom.addMovie(fifth);
+        Afisha[] returned = new Afisha[]{first, second, third, fourth};
+        doReturn(returned).when(repository).findAll();
+        Afisha[] actual = manager.getAll();
+        Afisha[] expected = new Afisha[]{fourth, third, second, first};
+        assertArrayEquals(expected, actual);
+        verify(repository, times(1)).findAll();
 
     }
 
-
     @Test
     void getLastTenDefaultManager() {
-        manager.addMovie(tenth);
+        Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth};
+        doReturn(returned).when(repository).findAll();
         Afisha[] actual = manager.getAll();
         Afisha[] expected = new Afisha[]{tenth, ninth, eighth, seventh, sixth, fifth, fourth, third, second, first};
         assertArrayEquals(expected, actual);
+        verify(repository, times(1)).findAll();
     }
 
     @Test
     void getLastTenFromElevenDefaultManager() {
-        manager.addMovie(tenth);
-        manager.addMovie(eleventh);
+        Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh};
+        doReturn(returned).when(repository).findAll();
         Afisha[] actual = manager.getAll();
         Afisha[] expected = new Afisha[]{eleventh, tenth, ninth, eighth, seventh, sixth, fifth, fourth, third, second};
         assertArrayEquals(expected, actual);
+        verify(repository, times(1)).findAll();
     }
 
     @Test
     void getAllMoviesDefaultManager() {
+        Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth};
+        doReturn(returned).when(repository).findAll();
         Afisha[] actual = manager.getAll();
         Afisha[] expected = new Afisha[]{ninth, eighth, seventh, sixth, fifth, fourth, third, second, first};
         assertArrayEquals(expected, actual);
+        verify(repository, times(1)).findAll();
     }
 
     @Test
     void getLastFiveCustomManager() {
+        Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth};
+        doReturn(returned).when(repository).findAll();
         Afisha[] actual = managerCustom.getAll();
         Afisha[] expected = new Afisha[]{fifth, fourth, third, second, first};
         assertArrayEquals(actual, expected);
+        verify(repository, times(1)).findAll();
     }
 
     @Test
     void getLastFiveCustomManagerIfAddMore() {
-        managerCustom.addMovie(sixth);
-        managerCustom.addMovie(seventh);
-        managerCustom.addMovie(eighth);
-        managerCustom.addMovie(ninth);
-        managerCustom.addMovie(tenth);
+        Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth};
+        doReturn(returned).when(repository).findAll();
         Afisha[] actual = managerCustom.getAll();
         Afisha[] expected = new Afisha[]{tenth, ninth, eighth, seventh, sixth};
         assertArrayEquals(expected, actual);
+        verify(repository, times(1)).findAll();
     }
 
     @Test
     void getLastFiveCustomAfishaLengthIfEqualsNull() {
-        manager = new AfishaManager(0);
+        manager = new AfishaManager(repository, 0);
+        Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth};
+        doReturn(returned).when(repository).findAll();
         Afisha[] actual = managerCustom.getAll();
         Afisha[] expected = new Afisha[]{fifth, fourth, third, second, first};
         assertArrayEquals(actual, expected);
+        verify(repository, times(1)).findAll();
     }
 
     @Test
     void getLastFiveCustomAfishaLengthIfIncorrectUnderMax() {
-        manager = new AfishaManager(100);
+        manager = new AfishaManager(repository, 100);
+        Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth};
+        doReturn(returned).when(repository).findAll();
         Afisha[] actual = managerCustom.getAll();
         Afisha[] expected = new Afisha[]{fifth, fourth, third, second, first};
         assertArrayEquals(actual, expected);
+        verify(repository, times(1)).findAll();
     }
 
     @Test
     void getLastFiveCustomAfishaLengthIfOverMin() {
-        manager = new AfishaManager(-20);
+        manager = new AfishaManager(repository, -20);
+        Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth};
+        doReturn(returned).when(repository).findAll();
         Afisha[] actual = managerCustom.getAll();
         Afisha[] expected = new Afisha[]{fifth, fourth, third, second, first};
         assertArrayEquals(actual, expected);
+        verify(repository, times(1)).findAll();
     }
 
     @Test
     void getLastDefaultAfishaLengthIfOnlyOneFilm() {
-        manager = new AfishaManager(1);
-        manager.addMovie(fifth);
+        manager = new AfishaManager(repository, 1);
+        Afisha[] returned = new Afisha[]{fifth};
+        doReturn(returned).when(repository).findAll();
         Afisha[] actual = manager.getAll();
         Afisha[] expected = new Afisha[]{fifth};
         assertArrayEquals(expected, actual);
+        verify(repository, times(1)).findAll();
     }
 
 
