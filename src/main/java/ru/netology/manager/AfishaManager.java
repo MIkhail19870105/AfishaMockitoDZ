@@ -1,37 +1,31 @@
 package ru.netology.manager;
 
 import ru.netology.domain.Afisha;
+import ru.netology.repository.AfishaRepository;
+
+import java.text.spi.BreakIteratorProvider;
 
 public class AfishaManager {
 
-    private Afisha[] items = new Afisha[0];
+    private AfishaRepository repository;
     private int defaultAfishaLength = 10;
     private int customAfishaLength;
 
-    public AfishaManager() {
+    public AfishaManager(AfishaRepository repository) {
+        this.repository = repository;
     }
 
-    public AfishaManager(int customAfishaLength) {
+    public AfishaManager(AfishaRepository repository, int customAfishaLength) {
         this.customAfishaLength = customAfishaLength;
+        this.repository = repository;
     }
 
     public void addMovie(Afisha item) {
-        // создаём новый массив размером на единицу больше
-        int length = items.length + 1;
-        Afisha[] tmp = new Afisha[length];
-        // itar + tab
-        // копируем поэлементно
-        // for (int i = 0; i < items.length; i++) {
-        //   tmp[i] = items[i];
-        // }
-        System.arraycopy(items, 0, tmp, 0, items.length);
-        // кладём последним наш элемент
-        int lastIndex = tmp.length - 1;
-        tmp[lastIndex] = item;
-        items = tmp;
+        repository.save(item);
     }
 
     public Afisha[] getAll() {
+        Afisha[]items = repository.findAll();
         int length = items.length;
 
         if (customAfishaLength <= 0) {
