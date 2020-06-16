@@ -34,7 +34,7 @@ class AfishaManagerTest {
         manager.addMovie(sixth);
         manager.addMovie(seventh);
         manager.addMovie(eighth);
-        manager.addMovie(ninth);//
+        manager.addMovie(ninth);
 
 
         managerCustom = new AfishaManager(5);
