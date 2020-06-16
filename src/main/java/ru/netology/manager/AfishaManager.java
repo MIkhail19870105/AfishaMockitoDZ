@@ -1,15 +1,24 @@
 package ru.netology.manager;
 
-import ru.netology.domain.PurchaseItem;
+import ru.netology.domain.Afisha;
 
-public class PurchaseManager {
+public class AfishaManager {
 
-    private PurchaseItem[] items = new PurchaseItem[0];
+    private Afisha[] items = new Afisha[0];
+    private int defaultAfishaLength = 10;
+    private int customAfishaLength;
 
-    public void add(PurchaseItem item) {
+    public AfishaManager() {
+    }
+
+    public AfishaManager(int customAfishaLength) {
+        this.customAfishaLength = customAfishaLength;
+    }
+
+    public void addMovie(Afisha item) {
         // создаём новый массив размером на единицу больше
         int length = items.length + 1;
-        PurchaseItem[] tmp = new PurchaseItem[length];
+        Afisha[] tmp = new Afisha[length];
         // itar + tab
         // копируем поэлементно
         // for (int i = 0; i < items.length; i++) {
@@ -22,8 +31,20 @@ public class PurchaseManager {
         items = tmp;
     }
 
-    public PurchaseItem[] getAll() {
-        PurchaseItem[] result = new PurchaseItem[items.length];
+    public Afisha[] getAll() {
+        int length = items.length;
+
+        if (customAfishaLength <= 0) {
+            if (defaultAfishaLength < length) {
+                length = defaultAfishaLength;
+            }
+        } else {
+            if (customAfishaLength < length) {
+                length = customAfishaLength;
+            }
+        }
+
+        Afisha[] result = new Afisha[length];
         // перебираем массив в прямом порядке
         // но кладём в результаты в обратном
         for (int i = 0; i < result.length; i++) {
@@ -33,18 +54,4 @@ public class PurchaseManager {
         return result;
     }
 
-    // наивная реализация
-    public void removeById(int id) {
-        int length = items.length - 1;
-        PurchaseItem[] tmp = new PurchaseItem[length];
-        int index = 0;
-        for (PurchaseItem item : items) {
-            if (item.getId() != id) {
-                tmp[index] = item;
-                index++;
-            }
-        }
-        // меняем наши элементы
-        items = tmp;
-    }
 }
