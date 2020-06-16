@@ -115,7 +115,7 @@ class AfishaManagerTest {
     }
 
     @Test
-    void getLastCustomAfishaLengthIfOnlyOneFilmAdded() {
+    void getLastDefaultAfishaLengthIfOnlyOneFilm() {
         manager = new AfishaManager(1);
         manager.addMovie(fifth);
         Afisha[] actual = manager.getAll();
