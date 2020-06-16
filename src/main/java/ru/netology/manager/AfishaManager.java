@@ -44,7 +44,7 @@ public class AfishaManager {
                 length = customAfishaLength;
             }
         }
-        Afisha[] result = new Afisha[items.length];
+        Afisha[] result = new Afisha[length];
         // перебираем массив в прямом порядке
         // но кладём в результаты в обратном
         for (int i = 0; i < result.length; i++) {
