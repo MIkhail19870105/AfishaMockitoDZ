@@ -21,7 +21,7 @@ class AfishaManagerTest {
     @InjectMocks
 
     AfishaManager manager = new AfishaManager(repository);
-    AfishaManager managerCustom = new AfishaManager(repository, 5);
+
 
     private Afisha first = new Afisha(1, "Inception", "fantastic");
     private Afisha second = new Afisha(2, "Titanic", "drama");
@@ -38,22 +38,18 @@ class AfishaManagerTest {
     @BeforeEach
     void setUp() {
 
-        manager = new AfishaManager(repository);
-        managerCustom = new AfishaManager(repository, 5);
-
     }
 
     @Test
     void addMovie() {
-        manager.addMovie(first);
-        manager.addMovie(second);
-        manager.addMovie(third);
-        manager.addMovie(fourth);
-
-        Afisha[] returned = new Afisha[]{first, second, third, fourth};
+        Afisha twelwth = new Afisha(12,"Simpsons", "cartoon");
+        manager.addMovie(twelwth);
+        repository.save(twelwth);
+        AfishaManager manager = new AfishaManager(repository,3);
+        Afisha[] returned = new Afisha[]{first, second, third, twelwth};
         doReturn(returned).when(repository).findAll();
         Afisha[] actual = manager.getAll();
-        Afisha[] expected = new Afisha[]{fourth, third, second, first};
+        Afisha[] expected = new Afisha[]{twelwth, third, second};
         assertArrayEquals(expected, actual);
         verify(repository, times(1)).findAll();
 
@@ -91,9 +87,10 @@ class AfishaManagerTest {
 
     @Test
     void getLastFiveCustomManager() {
+        AfishaManager manager = new AfishaManager(repository,5);
         Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth};
         doReturn(returned).when(repository).findAll();
-        Afisha[] actual = managerCustom.getAll();
+        Afisha[] actual = manager.getAll();
         Afisha[] expected = new Afisha[]{fifth, fourth, third, second, first};
         assertArrayEquals(actual, expected);
         verify(repository, times(1)).findAll();
@@ -101,9 +98,10 @@ class AfishaManagerTest {
 
     @Test
     void getLastFiveCustomManagerIfAddMore() {
+        AfishaManager manager = new AfishaManager(repository,5);
         Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth};
         doReturn(returned).when(repository).findAll();
-        Afisha[] actual = managerCustom.getAll();
+        Afisha[] actual = manager.getAll();
         Afisha[] expected = new Afisha[]{tenth, ninth, eighth, seventh, sixth};
         assertArrayEquals(expected, actual);
         verify(repository, times(1)).findAll();
@@ -111,10 +109,10 @@ class AfishaManagerTest {
 
     @Test
     void getLastFiveCustomAfishaLengthIfEqualsNull() {
-        manager = new AfishaManager(repository, 0);
+        AfishaManager manager = new AfishaManager(repository,0);
         Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth};
         doReturn(returned).when(repository).findAll();
-        Afisha[] actual = managerCustom.getAll();
+        Afisha[] actual = manager.getAll();
         Afisha[] expected = new Afisha[]{fifth, fourth, third, second, first};
         assertArrayEquals(actual, expected);
         verify(repository, times(1)).findAll();
@@ -122,10 +120,10 @@ class AfishaManagerTest {
 
     @Test
     void getLastFiveCustomAfishaLengthIfIncorrectUnderMax() {
-        manager = new AfishaManager(repository, 100);
+        AfishaManager manager = new AfishaManager(repository,100);
         Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth};
         doReturn(returned).when(repository).findAll();
-        Afisha[] actual = managerCustom.getAll();
+        Afisha[] actual = manager.getAll();
         Afisha[] expected = new Afisha[]{fifth, fourth, third, second, first};
         assertArrayEquals(actual, expected);
         verify(repository, times(1)).findAll();
@@ -133,10 +131,10 @@ class AfishaManagerTest {
 
     @Test
     void getLastFiveCustomAfishaLengthIfOverMin() {
-        manager = new AfishaManager(repository, -20);
+        AfishaManager manager = new AfishaManager(repository,-20);
         Afisha[] returned = new Afisha[]{first, second, third, fourth, fifth};
         doReturn(returned).when(repository).findAll();
-        Afisha[] actual = managerCustom.getAll();
+        Afisha[] actual = manager.getAll();
         Afisha[] expected = new Afisha[]{fifth, fourth, third, second, first};
         assertArrayEquals(actual, expected);
         verify(repository, times(1)).findAll();
