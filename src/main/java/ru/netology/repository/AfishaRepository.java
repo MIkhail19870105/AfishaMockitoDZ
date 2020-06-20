@@ -1,15 +1,19 @@
-package ru.netology.manager;
+package ru.netology.repository;
 
-import ru.netology.domain.PurchaseItem;
+import ru.netology.domain.Afisha;
 
-public class PurchaseManager {
+public class AfishaRepository {
 
-    private PurchaseItem[] items = new PurchaseItem[0];
+    private Afisha[] items = new Afisha[0];
 
-    public void add(PurchaseItem item) {
+    public Afisha[] findAll() {
+        return items;
+    }
+
+    public void save(Afisha item) {
         // создаём новый массив размером на единицу больше
         int length = items.length + 1;
-        PurchaseItem[] tmp = new PurchaseItem[length];
+        Afisha[] tmp = new Afisha[length];
         // itar + tab
         // копируем поэлементно
         // for (int i = 0; i < items.length; i++) {
@@ -22,23 +26,24 @@ public class PurchaseManager {
         items = tmp;
     }
 
-    public PurchaseItem[] getAll() {
-        PurchaseItem[] result = new PurchaseItem[items.length];
-        // перебираем массив в прямом порядке
-        // но кладём в результаты в обратном
-        for (int i = 0; i < result.length; i++) {
-            int index = items.length - i - 1;
-            result[i] = items[index];
+    public void findById(int id) {
+        Afisha[] tmp = new Afisha[1];
+        int index = 0;
+        for (Afisha item : items) {
+            if (item.getId() == id) {
+                tmp[index] = item;
+                index++;
+            }
         }
-        return result;
+        items = tmp;
     }
 
     // наивная реализация
     public void removeById(int id) {
         int length = items.length - 1;
-        PurchaseItem[] tmp = new PurchaseItem[length];
+        Afisha[] tmp = new Afisha[length];
         int index = 0;
-        for (PurchaseItem item : items) {
+        for (Afisha item : items) {
             if (item.getId() != id) {
                 tmp[index] = item;
                 index++;
@@ -47,4 +52,9 @@ public class PurchaseManager {
         // меняем наши элементы
         items = tmp;
     }
+
+    public void removeAll() {
+        items = new Afisha[0];
+    }
+
 }
